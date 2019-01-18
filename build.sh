@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SDK_VERSION="1.23"
-TARGET_VERSION="3.0.0.8"
+SDK_VERSION="1.24"
+TARGET_VERSION="3.0.1.11"
 SDK_NAME="Sailfish_OS-$TARGET_VERSION-Platform_SDK_Chroot-i486.tar.bz2"
 SDK_URL="http://releases.sailfishos.org/sdk/installers/$SDK_VERSION/$SDK_NAME"
 
