@@ -13,13 +13,18 @@ RUN set -ex;\
  chmod -w /etc/sudoers
 
 USER nemo
+WORKDIR /home/nemo
 
 RUN set -ex ;\
  sudo zypper ref ;\
  sudo zypper -qn in tar ;\
+ curl -O https://releases.sailfishos.org/sdk/targets/Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Tooling-i486.tar.7z ;\
+ 7z x Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Tooling-i486.tar.7z ;\
+ rm -f Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Tooling-i486.tar.7z ;\
+ tar uf Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Tooling-i486.tar mer-tooling-chroot ;\
  sdk-assistant -y create SailfishOS-$TARGET_VERSION \
-    https://releases.sailfishos.org/sdk/targets/Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Tooling-i486.tar.7z ;\
- sudo mv -f /home/nemo/mer-tooling-chroot /srv/mer/toolings/SailfishOS-$TARGET_VERSION/mer-tooling-chroot ;\
+    Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Tooling-i486.tar ;\
+ rm -f Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Tooling-i486.tar ;\
  sdk-assistant -y create SailfishOS-$TARGET_VERSION-armv7hl \
     https://releases.sailfishos.org/sdk/targets/Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Target-armv7hl.tar.7z ;\
  sdk-assistant -y create SailfishOS-$TARGET_VERSION-i486 \
