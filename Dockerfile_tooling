@@ -6,8 +6,8 @@ ARG TARGET_VERSION
 
 COPY mer-tooling-chroot /home/nemo/mer-tooling-chroot
 
-RUN set -ex;\
 # Add nemo in sudoers without password
+RUN set -ex;\
  chmod +w /etc/sudoers ;\
  echo "nemo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ;\
  chmod -w /etc/sudoers
