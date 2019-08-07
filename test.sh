@@ -9,5 +9,5 @@ docker run \
     --rm \
     -v=${TESTS_DIR}:${CONTAINER_TESTS_DIR} \
     -w=${CONTAINER_TESTS_DIR} \
-    sailfishos-platform-sdk \
+    r1tschy/sailfishos-platform-sdk \
     ${CONTAINER_TESTS_DIR}/test_qt_build.sh
