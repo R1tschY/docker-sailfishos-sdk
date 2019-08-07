@@ -10,8 +10,7 @@ def fix_tar(src: TarFile, dest: TarFile):
     # srcfile: TarInfo
 
     for srcfile in iter(src.next, None):
-        file: io.BufferedReader = \
-            src.extractfile(srcfile) if srcfile.isreg() else None
+        file = src.extractfile(srcfile) if srcfile.isreg() else None
 
         # fix uid/gid
         if srcfile.uid == 100000:
