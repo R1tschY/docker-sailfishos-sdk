@@ -10,19 +10,17 @@ export BASE_IMAGE="r1tschy/sailfishos-platform-sdk-base"
 export BUILD_IMAGE="r1tschy/sailfishos-platform-sdk"
 
 if [ ! -f "$SDK_NAME" ] ; then
-  echo "Downloading base image"
+  echo "⬇️ Downloading base image"
   wget "$SDK_URL"
-  echo "Downloading base image: DONE"
 fi
 
 # Fix uid/gid for userns feature (used by circleci)
 if [ ! -f "Fixed-$SDK_NAME" ] ; then
-  echo "Fixing base image"
+  echo "🔧 Fixing base image user id"
   ./fix-baseimg-uid.py "$SDK_NAME" "Fixed-$SDK_NAME"
-  echo "Fixing base image: DONE"
 fi
 
-echo "Building images"
+echo "🚧 Building images"
 
 docker import "Fixed-$SDK_NAME" "$BASE_IMAGE:$TARGET_VERSION"
 docker tag "$BASE_IMAGE:$TARGET_VERSION" "$BASE_IMAGE:latest"
@@ -32,7 +30,7 @@ docker build \
     --build-arg "SDK_VERSION=$SDK_VERSION" \
     --build-arg "TARGET_VERSION=$TARGET_VERSION" \
     -t "$BUILD_IMAGE-tooling:$TARGET_VERSION" \
-    -t "$BUILD_IMAGE-tooling:latest"
+    -t "$BUILD_IMAGE-tooling:latest" \
     .
 
 docker build \
@@ -57,9 +55,7 @@ docker build \
     -t "$BUILD_IMAGE:latest" \
     .
     
-echo "Building images: DONE"
-
-echo "Pushing to docker hub"
+echo "⬆️ Pushing to docker hub"
 docker push "$BASE_IMAGE:$TARGET_VERSION"
 docker push "$BASE_IMAGE:latest"
 docker push "$BUILD_IMAGE:$TARGET_VERSION"
@@ -68,4 +64,3 @@ docker push "$BUILD_IMAGE:$TARGET_VERSION-i486"
 docker push "$BUILD_IMAGE:latest"
 docker push "$BUILD_IMAGE:armv7hl"
 docker push "$BUILD_IMAGE:i486"
-echo "Pushing to docker hub: DONE"
