@@ -7,7 +7,7 @@ from tarfile import TarFile, TarInfo
 
 
 def fix_tar(src: TarFile, dest: TarFile):
-    srcfile: TarInfo
+    # srcfile: TarInfo
 
     for srcfile in iter(src.next, None):
         file: io.BufferedReader = \
