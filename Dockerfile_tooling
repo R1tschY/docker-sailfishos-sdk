@@ -16,8 +16,9 @@ USER nemo
 WORKDIR /home/nemo
 
 RUN set -ex ;\
+ sudo rm /etc/zypp/repos.d/ssu_adaptation0_release.repo ;\
  sudo zypper ref ;\
- sudo zypper -qn in tar ;\
+ \
  curl -O https://releases.sailfishos.org/sdk/targets/Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Tooling-i486.tar.7z ;\
  7z x Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Tooling-i486.tar.7z ;\
  rm -f Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Tooling-i486.tar.7z ;\
@@ -25,13 +26,11 @@ RUN set -ex ;\
  sdk-assistant -y create SailfishOS-$TARGET_VERSION \
     Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Tooling-i486.tar ;\
  rm -f Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Tooling-i486.tar ;\
- sdk-assistant -y create SailfishOS-$TARGET_VERSION-armv7hl \
-    https://releases.sailfishos.org/sdk/targets/Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Target-armv7hl.tar.7z ;\
- sdk-assistant -y create SailfishOS-$TARGET_VERSION-i486 \
-    https://releases.sailfishos.org/sdk/targets/Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Target-i486.tar.7z ;\
+ \
  sudo rm -rf /var/cache/zypp/* ;\
  sudo rm -rf /srv/mer/targets/SailfishOS-$TARGET_VERSION-armv7hl/var/cache/zypp/* ;\
  sudo rm -rf /srv/mer/targets/SailfishOS-$TARGET_VERSION-i486/var/cache/zypp/* ;\
+ sudo rm -rf mer-tooling-chroot ;\
  \
  sudo find /srv -user 100000 -exec chown -h 1000 '{}' + ;\
  sudo find /srv -group 100000 -exec chgrp -h 1000 '{}' +

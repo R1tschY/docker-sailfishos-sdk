@@ -1,6 +1,7 @@
 # Scripts to build a Dockerized version of the Sailfish OS platform SDK
 
-[![Build Status](https://travis-ci.org/SfietKonstantin/docker-sailfishos-sdk.svg?branch=master)](https://travis-ci.org/SfietKonstantin/docker-sailfishos-sdk)
+[![](https://images.microbadger.com/badges/version/r1tschy/sailfishos-platform-sdk.svg)](https://microbadger.com/images/r1tschy/sailfishos-platform-sdk "")
+[![](https://images.microbadger.com/badges/image/r1tschy/sailfishos-platform-sdk.svg)](https://microbadger.com/images/r1tschy/sailfishos-platform-sdk "")
 
 ## TLDR
 
