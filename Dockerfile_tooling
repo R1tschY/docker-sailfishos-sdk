@@ -1,36 +1,28 @@
-FROM r1tschy/sailfishos-platform-sdk-base
-MAINTAINER Richard Liebscher <r1tschy@yahoo.de>
+FROM r1tschy/sailfishos-platform-sdk-base AS builder
+LABEL Author="Richard Liebscher <r1tschy@yahoo.de>"
 
-ARG SDK_VERSION
 ARG TARGET_VERSION
-
-COPY mer-tooling-chroot /home/nemo/mer-tooling-chroot
-
-# Add nemo in sudoers without password
-RUN set -ex;\
- chmod +w /etc/sudoers ;\
- echo "nemo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ;\
- chmod -w /etc/sudoers
 
 USER nemo
 WORKDIR /home/nemo
 
-RUN set -ex ;\
- sudo rm /etc/zypp/repos.d/ssu_adaptation0_release.repo ;\
- sudo zypper ref ;\
- \
- curl -O https://releases.sailfishos.org/sdk/targets/Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Tooling-i486.tar.7z ;\
- 7z x Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Tooling-i486.tar.7z ;\
- rm -f Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Tooling-i486.tar.7z ;\
- tar uf Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Tooling-i486.tar mer-tooling-chroot ;\
- sdk-assistant -y create SailfishOS-$TARGET_VERSION \
-    Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Tooling-i486.tar ;\
- rm -f Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Tooling-i486.tar ;\
- \
- sudo rm -rf /var/cache/zypp/* ;\
- sudo rm -rf /srv/mer/targets/SailfishOS-$TARGET_VERSION-armv7hl/var/cache/zypp/* ;\
- sudo rm -rf /srv/mer/targets/SailfishOS-$TARGET_VERSION-i486/var/cache/zypp/* ;\
- sudo rm -rf mer-tooling-chroot ;\
- \
- sudo find /srv -user 100000 -exec chown -h 1000 '{}' + ;\
- sudo find /srv -group 100000 -exec chgrp -h 1000 '{}' +
+COPY target/tooling-i486.tar.gz .
+
+RUN set -ex &&\
+ sudo mkdir /host_targets &&\
+ sudo zypper ref &&\
+ sdk-assistant -y create SailfishOS-$TARGET_VERSION tooling-i486.tar.gz &&\
+ sudo rm -rf /srv/mer/toolings/SailfishOS-$TARGET_VERSION/var/cache/zypp/*
+
+
+FROM r1tschy/sailfishos-platform-sdk-base
+LABEL Author="Richard Liebscher <r1tschy@yahoo.de>"
+
+ARG TARGET_VERSION
+
+USER nemo
+WORKDIR /home/nemo
+
+COPY --from=builder /etc/machine-id /etc/machine-id
+COPY --from=builder /srv/mer/toolings/SailfishOS-$TARGET_VERSION /srv/mer/toolings/SailfishOS-$TARGET_VERSION
+
