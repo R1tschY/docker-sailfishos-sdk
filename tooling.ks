@@ -13,6 +13,8 @@ repo --name=sdk-@RELEASE@-@ARCH@ --baseurl=https://releases.jolla.com/releases/@
 %packages
 @Jolla Configuration Sailfish SDK Tooling
 ssu-vendor-data-jolla
+feature-jolla-sdk
+ofono-configs-build-engine
 %end
 
 %pre

@@ -1,23 +1,12 @@
-FROM r1tschy/sailfishos-platform-sdk-tooling AS builder
+FROM r1tschy/sailfishos-platform-sdk:armv7hl
 LABEL Author="Richard Liebscher <r1tschy@yahoo.de>"
 
 ARG TARGET_VERSION
 
 COPY target/target-i486.tar.gz .
-COPY target/target-armv7hl.tar.gz .
 
 RUN set -ex &&\
  sudo zypper ref &&\
  sdk-assistant -y create SailfishOS-$TARGET_VERSION-i486 target-i486.tar.gz &&\
- sdk-assistant -y create SailfishOS-$TARGET_VERSION-armv7hl target-armv7hl.tar.gz &&\
- sudo rm -rf /srv/mer/targets/SailfishOS-$TARGET_VERSION-i486/var/cache/zypp/* &&\
- sudo rm -rf /srv/mer/targets/SailfishOS-$TARGET_VERSION-armv7hl/var/cache/zypp/*
- 
-
-FROM r1tschy/sailfishos-platform-sdk-tooling
-LABEL Author="Richard Liebscher <r1tschy@yahoo.de>"
-
-ARG TARGET_VERSION
-
-COPY --from=builder /srv/mer/targets/SailfishOS-$TARGET_VERSION-i486 /srv/mer/targets/SailfishOS-$TARGET_VERSION-i486
-COPY --from=builder /srv/mer/targets/SailfishOS-$TARGET_VERSION-armv7hl /srv/mer/targets/SailfishOS-$TARGET_VERSION-armv7hl
+ sudo rm -rf /srv/mer/targets/SailfishOS-$TARGET_VERSION-i486/var/cache/zypp &&\
+ sudo rm -rf /var/cache/zypp target-*.tar.gz
