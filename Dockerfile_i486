@@ -8,5 +8,5 @@ COPY target/target-i486.tar.gz .
 RUN set -ex &&\
  sudo zypper ref &&\
  sdk-assistant -y create SailfishOS-$TARGET_VERSION-i486 target-i486.tar.gz &&\
- sudo rm -rf /srv/mer/targets/SailfishOS-$TARGET_VERSION-i486/var/cache/zypp &&\
- sudo rm -rf /var/cache/zypp target-*.tar.gz
+ sudo rm -rf /srv/mer/targets/SailfishOS-$TARGET_VERSION-i486/var/cache/zypp/* &&\
+ sudo rm -rf /var/cache/zypp/* target-*.tar.gz

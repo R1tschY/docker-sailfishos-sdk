@@ -13,8 +13,6 @@ repo --name=sdk-@RELEASE@-@ARCH@ --baseurl=https://releases.jolla.com/releases/@
 %packages
 patterns-sailfish-configuration-platform-sdk-chroot
 ssu-vendor-data-jolla
-feature-jolla-sdk
-git
 kmod
 %end
 

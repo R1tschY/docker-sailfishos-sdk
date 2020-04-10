@@ -25,15 +25,15 @@ docker run --rm \
 
 echo "== ⚙️ Building images"
 
-#docker import "target/chroot-i486.tar.gz" "$BASE_IMAGE:$TARGET_VERSION"
-#docker tag "$BASE_IMAGE:$TARGET_VERSION" "$BASE_IMAGE:latest"
+docker import "target/chroot-i486.tar.gz" "$BASE_IMAGE:$TARGET_VERSION"
+docker tag "$BASE_IMAGE:$TARGET_VERSION" "$BASE_IMAGE:latest"
 
-# docker build \
-#     -f Dockerfile_tooling \
-#     --build-arg "TARGET_VERSION=$TARGET_VERSION" \
-#     -t "$BUILD_IMAGE-tooling:$TARGET_VERSION" \
-#     -t "$BUILD_IMAGE-tooling:latest" \
-#     .
+docker build \
+    -f Dockerfile_tooling \
+    --build-arg "TARGET_VERSION=$TARGET_VERSION" \
+    -t "$BUILD_IMAGE-tooling:$TARGET_VERSION" \
+    -t "$BUILD_IMAGE-tooling:latest" \
+    .
 
 docker build \
     -f Dockerfile_i486 \
@@ -58,7 +58,7 @@ docker build \
     -t "$BUILD_IMAGE:$TARGET_VERSION" \
     -t "$BUILD_IMAGE:latest" \
     .
-exit
+
 echo "== ⬆️ Pushing to docker hub"
 docker push "$BASE_IMAGE:$TARGET_VERSION"
 docker push "$BASE_IMAGE:latest"
