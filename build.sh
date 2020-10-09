@@ -4,9 +4,8 @@ set -euxo pipefail
 # dotenv
 export $(egrep -v '^#' env | xargs -d '\n')
 
-mkdir -p target
-
 echo "== ⚙️ Building base images"
+mkdir -p target
 cp *.ks target/
 docker run --rm \
     --privileged \

@@ -1,3 +1,3 @@
 TARGET_VERSION=3.3.0.14
-BASE_IMAGE=r1tschy/sailfishos-platform-sdk-base
-BUILD_IMAGE=r1tschy/sailfishos-platform-sdk
+BASE_IMAGE=ghcr.io/r1tschy/docker-sailfishos-sdk/sailfishos-platform-sdk-base
+BUILD_IMAGE=ghcr.io/r1tschy/docker-sailfishos-sdk/sailfishos-platform-sdk
