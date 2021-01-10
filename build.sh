@@ -1,69 +1,68 @@
 #!/usr/bin/env bash
 set -euxo pipefail
 
-# dotenv
+# env
 export $(egrep -v '^#' env | xargs -d '\n')
+export DOCKER_BUILDKIT=1
 
 echo "== ⚙️ Building base images"
-mkdir -p target
-cp *.ks target/
-docker run --rm \
-    --privileged \
-    --network=host \
-    -v $(pwd):/mnt \
-    -w /mnt \
-    -e RELEASE=$TARGET_VERSION \
-    coderus/sailfishos-baseimage \
-    /mnt/build-envs.sh 
-    
-# Fix uid/gid for userns feature (used by circleci)
-# if [ ! -f "target/fixed-baseimage.tar.bz2" ] ; then
-#   echo "🔧 Fixing base image user id"
-#   ./fix-baseimg-uid.py "target/baseimage.tar.bz2" "target/fixed-baseimage.tar.bz2"
-# fi
+if [ ! -d target ]
+then
+    mkdir -p target
+    cp *.ks target/
+    docker run --rm \
+        --privileged \
+        -v $PWD:/mnt \
+        -w /mnt \
+        -e RELEASE=$TARGET_VERSION \
+        coderus/sailfishos-baseimage \
+        /mnt/build-envs.sh 
+fi
+
 
 echo "== ⚙️ Building images"
 
-docker import "target/chroot-i486.tar.gz" "$BASE_IMAGE:$TARGET_VERSION"
-docker tag "$BASE_IMAGE:$TARGET_VERSION" "$BASE_IMAGE:latest"
+#docker import "target/chroot-i486.tar.gz" "$SDK_BASE_IMAGE:$TARGET_VERSION"
+docker tag "$SDK_BASE_IMAGE:$TARGET_VERSION" "$SDK_BASE_IMAGE:latest"
 
 docker build \
-    -f Dockerfile_tooling \
+    -f tooling.Dockerfile \
     --build-arg "TARGET_VERSION=$TARGET_VERSION" \
-    -t "$BUILD_IMAGE-tooling:$TARGET_VERSION" \
-    -t "$BUILD_IMAGE-tooling:latest" \
+    --build-arg "SDK_BASE_IMAGE=$SDK_BASE_IMAGE" \
+    -t "$SDK_TOOLING_IMAGE:$TARGET_VERSION" \
+    -t "$SDK_TOOLING_IMAGE:latest" \
     .
 
 docker build \
-    -f Dockerfile_i486 \
+    -f i486.Dockerfile \
     --build-arg "TARGET_VERSION=$TARGET_VERSION" \
-    --squash \
-    -t "$BUILD_IMAGE:$TARGET_VERSION-i486" \
-    -t "$BUILD_IMAGE:i486" \
+    --build-arg "SDK_TOOLING_IMAGE=$SDK_TOOLING_IMAGE" \
+    -t "$SDK_IMAGE:$TARGET_VERSION-i486" \
+    -t "$SDK_IMAGE:i486" \
     .
 
 docker build \
-    -f Dockerfile_armv7hl \
+    -f armv7hl.Dockerfile \
     --build-arg "TARGET_VERSION=$TARGET_VERSION" \
-    --squash \
-    -t "$BUILD_IMAGE:$TARGET_VERSION-armv7hl" \
-    -t "$BUILD_IMAGE:armv7hl" \
+    --build-arg "SDK_TOOLING_IMAGE=$SDK_TOOLING_IMAGE" \
+    -t "$SDK_IMAGE:$TARGET_VERSION-armv7hl" \
+    -t "$SDK_IMAGE:armv7hl" \
     .
 
 docker build \
-    -f Dockerfile_all \
+    -f all.Dockerfile \
     --build-arg "TARGET_VERSION=$TARGET_VERSION" \
-    --squash \
-    -t "$BUILD_IMAGE:$TARGET_VERSION" \
-    -t "$BUILD_IMAGE:latest" \
+    --build-arg "SDK_IMAGE=$SDK_IMAGE" \
+    -t "$SDK_IMAGE:$TARGET_VERSION" \
+    -t "$SDK_IMAGE:latest" \
     .
 
 echo "== ⬆️ Pushing to docker hub"
-docker push "$BASE_IMAGE:$TARGET_VERSION"
-docker push "$BASE_IMAGE:latest"
-docker push "$BUILD_IMAGE:$TARGET_VERSION"
-docker push "$BUILD_IMAGE:$TARGET_VERSION-armv7hl"
-docker push "$BUILD_IMAGE:$TARGET_VERSION-i486"
-docker push "$BUILD_IMAGE:latest"
-docker push "$BUILD_IMAGE:armv7hl"
-docker push "$BUILD_IMAGE:i486"
+docker push "$SDK_BASE_IMAGE:$TARGET_VERSION"
+docker push "$SDK_BASE_IMAGE:latest"
+docker push "$SDK_IMAGE:$TARGET_VERSION"
+docker push "$SDK_IMAGE:$TARGET_VERSION-armv7hl"
+docker push "$SDK_IMAGE:$TARGET_VERSION-i486"
+docker push "$SDK_IMAGE:latest"
+docker push "$SDK_IMAGE:armv7hl"
+docker push "$SDK_IMAGE:i486"

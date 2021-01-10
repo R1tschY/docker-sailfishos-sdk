@@ -12,22 +12,7 @@ repo --name=sdk-@RELEASE@-@ARCH@ --baseurl=https://releases.jolla.com/releases/@
 repo --name=apps-@RELEASE@-@ARCH@ --baseurl=https://releases.jolla.com/jolla-apps/@RELEASE@/@ARCH@/
 
 %packages
-# @Jolla Configuration Sailfish SDK Target
-patterns-sailfish-qt5-devel-full
-busybox-symlinks-diffutils
-busybox-symlinks-grep
-busybox-symlinks-findutils
-patterns-sailfish-target-support
-sdk-target-configs
-#patterns-sailfish-silica-devel
-maliit-framework-wayland-devel
-sailfishsilica-qt5
-desktop-file-utils
-mapplauncherd-qt5-devel
-#ambienced-devel
-mlite-qt5-devel
-libsailfishapp-devel
-# end of @Jolla Configuration Sailfish SDK Target
+@Jolla Configuration Sailfish SDK Target
 ssu-vendor-data-jolla
 %end
 

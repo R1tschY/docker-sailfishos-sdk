@@ -12,6 +12,6 @@ docker run \
     --rm \
     -v=${TESTS_DIR}:${CONTAINER_TESTS_DIR} \
     -w=${CONTAINER_TESTS_DIR} \
-    r1tschy/sailfishos-platform-sdk:$TARGET_VERSION \
+    $SDK_IMAGE:$TARGET_VERSION \
     ${CONTAINER_TESTS_DIR}/test_qt_build.sh \
     $TARGET_VERSION
