@@ -52,6 +52,7 @@ docker build \
     -t "$SDK_BASE_IMAGE:$TARGET_VERSION" \
     -t "$SDK_BASE_IMAGE:latest" \
     .
+docker rmi "$SDK_BASE_IMAGE-import:$TARGET_VERSION"
 
 docker build \
     -f tooling.Dockerfile \
