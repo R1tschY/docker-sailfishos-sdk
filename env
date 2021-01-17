@@ -1,4 +1,5 @@
-TARGET_VERSION=3.3.0.14
+SDK_VERSION=3.1.7.deprecated
+TARGET_VERSION=3.3.0.16
 
 SDK_BASE_IMAGE=r1tschy/sailfishos-platform-sdk-base
 SDK_TOOLING_IMAGE=r1tschy/sailfishos-platform-sdk-tooling

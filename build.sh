@@ -5,54 +5,87 @@ set -euxo pipefail
 export $(egrep -v '^#' env | xargs -d '\n')
 export DOCKER_BUILDKIT=1
 
-echo "== ⚙️ Building base images"
-if [ ! -d target ]
-then
-    mkdir -p target
-    cp *.ks target/
-    docker run --rm \
-        --privileged \
-        -v $PWD:/mnt \
-        -w /mnt \
-        -e RELEASE=$TARGET_VERSION \
-        coderus/sailfishos-baseimage \
-        /mnt/build-envs.sh 
+SDK_NAME="Sailfish_OS-$TARGET_VERSION-Platform_SDK_Chroot-i486.tar.bz2"
+SDK_URL="http://releases.sailfishos.org/sdk/installers/$SDK_VERSION/$SDK_NAME"
+
+TOOLING_NAME="Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Tooling-i486.tar.7z"
+TOOLING_TAR_NAME="Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Tooling-i486.tar"
+TOOLING_URL="https://releases.sailfishos.org/sdk/targets/$TOOLING_NAME"
+
+TARGET_ARMV7HL_NAME="Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Target-armv7hl.tar.7z"
+TARGET_ARMV7HL_URL="https://releases.sailfishos.org/sdk/targets/$TARGET_ARMV7HL_NAME"
+
+TARGET_I486_NAME="Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Target-i486.tar.7z"
+TARGET_I486_URL="https://releases.sailfishos.org/sdk/targets/$TARGET_ARMV7HL_NAME"
+
+echo "== ⚙️ Download zips"
+mkdir -p target
+
+if [ ! -f "target/$SDK_NAME" ] ; then
+    curl "$SDK_URL" -o "target/$SDK_NAME"
 fi
 
+if [ ! -f "target/$TOOLING_NAME" ] ; then
+    curl "$TOOLING_URL" -o "target/$TOOLING_NAME"
+fi
+
+if [ ! -f "target/$TOOLING_TAR_NAME" ] ; then
+    7z x -otarget "target/$TOOLING_NAME"
+    tar uf "target/$TOOLING_TAR_NAME" mer-tooling-chroot
+fi
+
+if [ ! -f "target/$TARGET_ARMV7HL_NAME" ] ; then
+    curl "$TARGET_ARMV7HL_URL" -o "target/$TARGET_ARMV7HL_NAME"
+fi
+
+if [ ! -f "target/$TARGET_I486_NAME" ] ; then
+    curl "$TARGET_I486_URL" -o "target/$TARGET_I486_NAME"
+fi
 
 echo "== ⚙️ Building images"
 
-docker import "target/chroot-i486.tar.gz" "$SDK_BASE_IMAGE:$TARGET_VERSION"
-docker tag "$SDK_BASE_IMAGE:$TARGET_VERSION" "$SDK_BASE_IMAGE:latest"
+docker import "target/$SDK_NAME" "$SDK_BASE_IMAGE-import:$TARGET_VERSION"
+docker build \
+    -f base.Dockerfile \
+    --build-arg "TARGET_VERSION=$TARGET_VERSION" \
+    --build-arg "SDK_BASE_IMAGE=$SDK_BASE_IMAGE-import:$TARGET_VERSION" \
+    -t "$SDK_BASE_IMAGE:$TARGET_VERSION" \
+    -t "$SDK_BASE_IMAGE:latest" \
+    .
 
 docker build \
     -f tooling.Dockerfile \
     --build-arg "TARGET_VERSION=$TARGET_VERSION" \
     --build-arg "SDK_BASE_IMAGE=$SDK_BASE_IMAGE" \
+    --build-arg "TOOLING_NAME=$TOOLING_TAR_NAME" \
     -t "$SDK_TOOLING_IMAGE:$TARGET_VERSION" \
     -t "$SDK_TOOLING_IMAGE:latest" \
-    .
-
-docker build \
-    -f i486.Dockerfile \
-    --build-arg "TARGET_VERSION=$TARGET_VERSION" \
-    --build-arg "SDK_TOOLING_IMAGE=$SDK_TOOLING_IMAGE" \
-    -t "$SDK_IMAGE:$TARGET_VERSION-i486" \
-    -t "$SDK_IMAGE:i486" \
     .
 
 docker build \
     -f armv7hl.Dockerfile \
     --build-arg "TARGET_VERSION=$TARGET_VERSION" \
     --build-arg "SDK_TOOLING_IMAGE=$SDK_TOOLING_IMAGE" \
+    --build-arg "TARGET_ARMV7HL_NAME=$TARGET_ARMV7HL_NAME" \
     -t "$SDK_IMAGE:$TARGET_VERSION-armv7hl" \
     -t "$SDK_IMAGE:armv7hl" \
+    .
+
+
+docker build \
+    -f i486.Dockerfile \
+    --build-arg "TARGET_VERSION=$TARGET_VERSION" \
+    --build-arg "SDK_TOOLING_IMAGE=$SDK_TOOLING_IMAGE" \
+    --build-arg "TARGET_I486_NAME=$TARGET_I486_NAME" \
+    -t "$SDK_IMAGE:$TARGET_VERSION-i486" \
+    -t "$SDK_IMAGE:i486" \
     .
 
 docker build \
     -f all.Dockerfile \
     --build-arg "TARGET_VERSION=$TARGET_VERSION" \
     --build-arg "SDK_IMAGE=$SDK_IMAGE" \
+    --build-arg "TARGET_I486_NAME=$TARGET_I486_NAME" \
     -t "$SDK_IMAGE:$TARGET_VERSION" \
     -t "$SDK_IMAGE:latest" \
     .

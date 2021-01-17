@@ -5,13 +5,11 @@ ARG SDK_BASE_IMAGE
 FROM $SDK_BASE_IMAGE
 LABEL Author="Richard Liebscher <r1tschy@posteo.de>"
 
+ARG TOOLING_NAME
 ARG TARGET_VERSION
 
-USER mersdk
-WORKDIR /home/mersdk
-
 RUN --mount=source=target,target=/target set -ex &&\
- sudo mkdir -m 0777 /host_targets &&\
- sdk-assistant -y create SailfishOS-$TARGET_VERSION /target/tooling-i486.tar.gz &&\
- sudo rm -rf /srv/mer/toolings/SailfishOS-$TARGET_VERSION/var/cache/zypp/*
+ sdk-assistant -y create SailfishOS-$TARGET_VERSION /target/$TOOLING_NAME &&\
+ sudo rm -rf /srv/mer/toolings/SailfishOS-$TARGET_VERSION/var/cache/zypp/* &&\
+ sudo rm -rf /var/cache/zypp/*
 
