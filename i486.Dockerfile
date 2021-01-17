@@ -4,6 +4,7 @@ ARG SDK_TOOLING_IMAGE
 
 FROM $SDK_TOOLING_IMAGE
 LABEL Author="Richard Liebscher <r1tschy@posteo.de>"
+LABEL org.opencontainers.image.source https://github.com/R1tschY/docker-sailfishos-sdk
 
 ARG TARGET_VERSION
 ARG TARGET_I486_NAME

@@ -4,6 +4,7 @@ ARG SDK_BASE_IMAGE
 
 FROM $SDK_BASE_IMAGE
 LABEL Author="Richard Liebscher <r1tschy@posteo.de>"
+LABEL org.opencontainers.image.source https://github.com/R1tschY/docker-sailfishos-sdk
 
 ARG TOOLING_NAME
 ARG TARGET_VERSION
