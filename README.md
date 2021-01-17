@@ -2,6 +2,7 @@
 
 See also:
 * [Docker Hub](https://hub.docker.com/r/r1tschy/sailfishos-platform-sdk)
+* [GitHub Container Registry](https://github.com/users/R1tschY/packages/container/package/sailfishos-platform-sdk)
 * [GitHub Action](https://github.com/R1tschY/sailfish-sdk-action)
 
 ## Tags
