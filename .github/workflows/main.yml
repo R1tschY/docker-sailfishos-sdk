@@ -20,7 +20,7 @@ jobs:
         run: ./test.sh
 
       - name: Docker Hub login
-        run: echo "${{ secrets.DH_PAT }}" | docker login --username "${{ github.actor }}" --password-stdin
+        run: echo "${{ secrets.DH_PAT }}" | docker login --username "${{ secrets.DH_USER }}" --password-stdin
 
       - name: GHCR login
         run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
