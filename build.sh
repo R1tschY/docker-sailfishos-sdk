@@ -16,7 +16,7 @@ TARGET_ARMV7HL_NAME="Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Target-armv7hl.tar
 TARGET_ARMV7HL_URL="https://releases.sailfishos.org/sdk/targets/$TARGET_ARMV7HL_NAME"
 
 TARGET_I486_NAME="Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Target-i486.tar.7z"
-TARGET_I486_URL="https://releases.sailfishos.org/sdk/targets/$TARGET_ARMV7HL_NAME"
+TARGET_I486_URL="https://releases.sailfishos.org/sdk/targets/$TARGET_I486_NAME"
 
 echo "== ⚙️ Download zips"
 mkdir -p target
