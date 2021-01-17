@@ -7,8 +7,8 @@ LABEL Author="Richard Liebscher <r1tschy@posteo.de>"
 
 ARG TARGET_VERSION
 
-USER nemo
-WORKDIR /home/nemo
+USER mersdk
+WORKDIR /home/mersdk
 
 RUN --mount=source=target,target=/target set -ex &&\
  sudo mkdir -m 0777 /host_targets &&\

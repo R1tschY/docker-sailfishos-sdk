@@ -1,4 +1,4 @@
-user --name nemo --groups audio,input,video --password nemo
+user --name mersdk --groups audio,input,video --password mersdk
 timezone --utc UTC
 lang en_US.UTF-8
 keyboard us
