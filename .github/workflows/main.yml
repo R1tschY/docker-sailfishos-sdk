@@ -2,9 +2,7 @@ name: Build Docker images
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches: [ "*" ]
 
 jobs:
   build:
@@ -12,6 +10,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - run: echo "::set-env name=DISABLE_LATEST::1"
+        if: github.ref != 'refs/heads/master'
 
       - name: Build images
         run: ./build.sh
