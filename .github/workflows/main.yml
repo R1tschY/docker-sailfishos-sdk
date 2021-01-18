@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - run: echo "::set-env name=DISABLE_LATEST::1"
+      - run: echo "DISABLE_LATEST=1" >> $GITHUB_ENV
         if: github.ref != 'refs/heads/master'
 
       - name: Build images
