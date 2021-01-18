@@ -21,7 +21,7 @@ docker push "$GITHUB_SDK_IMAGE:$TARGET_VERSION-armv7hl"
 docker push "$GITHUB_SDK_IMAGE:$TARGET_VERSION-i486"
 docker push "$GITHUB_SDK_IMAGE:$TARGET_VERSION"
 
-if [ -z "$DISABLE_LATEST" ] ; then
+if [ "x${DISABLE_LATEST:-0}" = "x0" ] ; then
     echo "== ⬆️ Pushing latest image tags"
 
     docker push "$SDK_BASE_IMAGE:latest"
