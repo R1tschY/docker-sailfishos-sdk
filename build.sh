@@ -29,11 +29,6 @@ if [ ! -f "target/$TOOLING_NAME" ] ; then
     curl "$TOOLING_URL" -o "target/$TOOLING_NAME"
 fi
 
-if [ ! -f "target/$TOOLING_TAR_NAME" ] ; then
-    7z x -otarget "target/$TOOLING_NAME"
-    tar uf "target/$TOOLING_TAR_NAME" mer-tooling-chroot
-fi
-
 if [ ! -f "target/$TARGET_ARMV7HL_NAME" ] ; then
     curl "$TARGET_ARMV7HL_URL" -o "target/$TARGET_ARMV7HL_NAME"
 fi
@@ -58,7 +53,7 @@ docker build \
     -f tooling.Dockerfile \
     --build-arg "TARGET_VERSION=$TARGET_VERSION" \
     --build-arg "SDK_BASE_IMAGE=$SDK_BASE_IMAGE" \
-    --build-arg "TOOLING_NAME=$TOOLING_TAR_NAME" \
+    --build-arg "TOOLING_NAME=$TOOLING_NAME" \
     -t "$SDK_TOOLING_IMAGE:$TARGET_VERSION" \
     -t "$SDK_TOOLING_IMAGE:latest" \
     .
