@@ -18,6 +18,9 @@ TARGET_ARMV7HL_URL="https://releases.sailfishos.org/sdk/targets/$TARGET_ARMV7HL_
 TARGET_I486_NAME="Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Target-i486.tar.7z"
 TARGET_I486_URL="https://releases.sailfishos.org/sdk/targets/$TARGET_I486_NAME"
 
+TARGET_AARCH64_NAME="Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Target-aarch64.tar.7z"
+TARGET_AARCH64_URL="https://releases.sailfishos.org/sdk/targets/$TARGET_AARCH64_NAME"
+
 echo "== ⚙️ Download zips"
 mkdir -p target
 
@@ -35,6 +38,10 @@ fi
 
 if [ ! -f "target/$TARGET_I486_NAME" ] ; then
     curl "$TARGET_I486_URL" -o "target/$TARGET_I486_NAME"
+fi
+
+if [ ! -f "target/$TARGET_AARCH64_NAME" ] ; then
+    curl "$TARGET_AARCH64_URL" -o "target/$TARGET_AARCH64_NAME"
 fi
 
 echo "== ⚙️ Building images"
@@ -75,6 +82,15 @@ docker build \
     --build-arg "TARGET_I486_NAME=$TARGET_I486_NAME" \
     -t "$SDK_IMAGE:$TARGET_VERSION-i486" \
     -t "$SDK_IMAGE:i486" \
+    .
+    
+docker build \
+    -f aarch64.Dockerfile \
+    --build-arg "TARGET_VERSION=$TARGET_VERSION" \
+    --build-arg "SDK_TOOLING_IMAGE=$SDK_TOOLING_IMAGE" \
+    --build-arg "TARGET_AARCH64_NAME=$TARGET_AARCH64_NAME" \
+    -t "$SDK_IMAGE:$TARGET_VERSION-aarch64" \
+    -t "$SDK_IMAGE:aarch64" \
     .
 
 docker build \
