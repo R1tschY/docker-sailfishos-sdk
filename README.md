@@ -10,6 +10,7 @@ See also:
 * `armv7hl` and `i486` target: `$SAILFISH_OS_RELEASE$-armv7hl`, `$SAILFISH_OS_RELEASE$`, `latest`
 * Only `armv7hl` target: `$SAILFISH_OS_RELEASE$-armv7hl`, `armv7hl`
 * Only `i486` target: `$SAILFISH_OS_RELEASE$-i486`, `i486`
+* Only `aarch64` target: `$SAILFISH_OS_RELEASE$-aarch64`, `aarch64`
 
 ## Summary
 
@@ -26,7 +27,7 @@ manually.
 
 - `sailfishos-platform-sdk-base` contains the SDK, without any installed target or tooling
 - `sailfishos-platform-sdk` contains the SDK and installed targets for `armv7hl` and `i486`
-  - tags exist for images with only `armv7hl` or `i486` target
+  - tags exist for images with only `armv7hl`, `i486` and `aarch64` target
 
 ## Build
 
