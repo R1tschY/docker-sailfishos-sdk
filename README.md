@@ -1,16 +1,27 @@
-*Dockerized [Sailfish OS Platform SDK](https://sailfishos.org/wiki/Platform_SDK)*
+# Dockerized [Sailfish OS Platform SDK](https://sailfishos.org/wiki/Platform_SDK)
 
 See also:
 * [Docker Hub](https://hub.docker.com/r/r1tschy/sailfishos-platform-sdk)
 * [GitHub Container Registry](https://github.com/users/R1tschY/packages/container/package/sailfishos-platform-sdk)
-* [GitHub Action](https://github.com/R1tschY/sailfish-sdk-action)
+* [GitHub Action using this image](https://github.com/R1tschY/sailfish-build-rpm)
 
 ## Tags
 
-* `armv7hl` and `i486` target: `$SAILFISH_OS_RELEASE$-armv7hl`, `$SAILFISH_OS_RELEASE$`, `latest`
-* Only `armv7hl` target: `$SAILFISH_OS_RELEASE$-armv7hl`, `armv7hl`
-* Only `i486` target: `$SAILFISH_OS_RELEASE$-i486`, `i486`
-* Only `aarch64` target: `$SAILFISH_OS_RELEASE$-aarch64`, `aarch64`
+* `armv7hl` and `i486` target: `${SAILFISH_OS_RELEASE}-armv7hl`, `${SAILFISH_OS_RELEASE}`, `latest`
+* Only `armv7hl` target: `${SAILFISH_OS_RELEASE}-armv7hl`, `armv7hl`
+* Only `i486` target: `${SAILFISH_OS_RELEASE}-i486`, `i486`
+* Only `aarch64` target: `${SAILFISH_OS_RELEASE}-aarch64`, `aarch64`
+
+## Usage
+
+Build RPM in current directory:
+```sh
+docker run \
+    -v $PWD:/home/mersdk/project \
+    --workdir /home/mersdk/project \
+    r1tschy/sailfishos-platform-sdk:4.1.0.24-armv7hl \
+    mb2 -t SailfishOS-4.1.0.24-armv7hl build
+```
 
 ## Summary
 
@@ -29,6 +40,15 @@ manually.
 - `sailfishos-platform-sdk` contains the SDK and installed targets for `armv7hl` and `i486`
   - tags exist for images with only `armv7hl`, `i486` and `aarch64` target
 
+This image is smaller than the image from [CODeRUS](https://github.com/CODeRUS/docker-sailfishos-sdk), because it uses [Docker buildx](https://docs.docker.com/buildx/working-with-buildx/) to create a more efficient image. Also a seperate image for every architecture exists. For example for 4.1.0.24:
+
+| Image                           | Tag              | Size   | Efficiency |
+| ------------------------------- | ---------------- | ------ | ---------- |
+| coderus/sailfishos-platform-sdk | 4.1.0.24         | 8.57GB | 57 %       |
+| r1tschy/sailfishos-platform-sdk | 4.1.0.24         | 3.37GB | 99 %       |
+| r1tschy/sailfishos-platform-sdk | 4.1.0.24-armv7hl | 2.69GB | 99 %       |
+
+
 ## Build
 
 You must have Docker installed and started.
@@ -37,17 +57,6 @@ You must also be connected to the Internet in order to build the image.
 
 ```sh
 ./build.sh
-```
-
-## Usage
-
-Build RPM in current directory:
-```sh
-docker run \
-    -v $PWD:/home/mersdk/project \
-    --workdir /home/mersdk/project \
-    r1tschy/sailfishos-platform-sdk:3.4.0.24-armv7hl \
-    mb2 -t SailfishOS-3.4.0.24-armv7hl build
 ```
 
 ## Credits
