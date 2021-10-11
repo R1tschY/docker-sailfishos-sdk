@@ -1,5 +1,5 @@
-SDK_VERSION=3.5.7
-TARGET_VERSION=4.1.0.24
+SDK_VERSION=3.6.6
+TARGET_VERSION=4.2.0.21
 
 SDK_BASE_IMAGE=r1tschy/sailfishos-platform-sdk-base
 SDK_TOOLING_IMAGE=r1tschy/sailfishos-platform-sdk-tooling

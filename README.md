@@ -19,8 +19,8 @@ Build RPM in current directory:
 docker run \
     -v $PWD:/home/mersdk/project \
     --workdir /home/mersdk/project \
-    r1tschy/sailfishos-platform-sdk:4.1.0.24-armv7hl \
-    mb2 -t SailfishOS-4.1.0.24-armv7hl build
+    r1tschy/sailfishos-platform-sdk:4.2.0.21-armv7hl \
+    mb2 -t SailfishOS-4.2.0.21-armv7hl build
 ```
 
 ## Summary
