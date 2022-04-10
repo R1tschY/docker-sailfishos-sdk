@@ -5,7 +5,7 @@ set -euxo pipefail
 export $(egrep -v '^#' env | xargs -d '\n')
 export DOCKER_BUILDKIT=1
 
-SDK_NAME="Sailfish_OS-Jolla_SDK-$TARGET_VERSION-Platform_SDK_Chroot-i486.tar.bz2"
+SDK_NAME="Sailfish_OS-$TARGET_VERSION-Platform_SDK_Chroot-i486.tar.bz2"
 SDK_URL="http://releases.sailfishos.org/sdk/installers/$SDK_VERSION/$SDK_NAME"
 
 TOOLING_NAME="Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Tooling-i486.tar.7z"
