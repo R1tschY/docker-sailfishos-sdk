@@ -25,23 +25,33 @@ echo "== ⚙️ Download zips"
 mkdir -p target
 
 if [ ! -f "target/$SDK_NAME" ] ; then
-    curl "$SDK_URL" -o "target/$SDK_NAME"
+    curl --fail "$SDK_URL" -o "target/$SDK_NAME"
+    curl --fail "$SDK_URL.md5" -o "target/$SDK_NAME.md5"
+    (cd target && md5sum -c "$SDK_NAME.md5")
 fi
 
 if [ ! -f "target/$TOOLING_NAME" ] ; then
-    curl "$TOOLING_URL" -o "target/$TOOLING_NAME"
+    curl --fail "$TOOLING_URL" -o "target/$TOOLING_NAME"
+    curl --fail "$TOOLING_URL.md5sum" -o "target/$TOOLING_NAME.md5"
+    (cd target && md5sum -c "$TOOLING_NAME.md5")
 fi
 
 if [ ! -f "target/$TARGET_ARMV7HL_NAME" ] ; then
-    curl "$TARGET_ARMV7HL_URL" -o "target/$TARGET_ARMV7HL_NAME"
+    curl --fail "$TARGET_ARMV7HL_URL" -o "target/$TARGET_ARMV7HL_NAME"
+    curl --fail "$TARGET_ARMV7HL_URL.md5sum" -o "target/$TARGET_ARMV7HL_NAME.md5"
+    (cd target && md5sum -c "$TARGET_ARMV7HL_NAME.md5")
 fi
 
 if [ ! -f "target/$TARGET_I486_NAME" ] ; then
-    curl "$TARGET_I486_URL" -o "target/$TARGET_I486_NAME"
+    curl --fail "$TARGET_I486_URL" -o "target/$TARGET_I486_NAME"
+    curl --fail "$TARGET_I486_URL.md5sum" -o "target/$TARGET_I486_NAME.md5"
+    (cd target && md5sum -c "$TARGET_I486_NAME.md5")
 fi
 
 if [ ! -f "target/$TARGET_AARCH64_NAME" ] ; then
-    curl "$TARGET_AARCH64_URL" -o "target/$TARGET_AARCH64_NAME"
+    curl --fail "$TARGET_AARCH64_URL" -o "target/$TARGET_AARCH64_NAME"
+    curl --fail "$TARGET_AARCH64_URL.md5sum" -o "target/$TARGET_AARCH64_NAME.md5"
+    (cd target && md5sum -c "$TARGET_AARCH64_NAME.md5")
 fi
 
 echo "== ⚙️ Building images"
